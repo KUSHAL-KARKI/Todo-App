@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div id="todo-table">
+        <!-- Form to add new todo items -->
+        <form action="/todo" method="POST">
+            <input type="text" name="item" placeholder="Add item ..." required />
+            <button type="submit">ADD ITEM</button>
+        </form>
+
+        <!-- List of todo items -->
+        <ul>
+            <% todos.forEach((item) => { %>
+                <li data-id="<%= item._id %>">
+                    <%= item.item %>
+            <% }) %>
+        </ul>
+    </div>
+
+    <script>
+      const todoList = document.querySelector('ul');
+      todoList.addEventListener('click', async (e)=>{
+        if(e.target.tagName === 'LI'){
+            const id = e.target.getAttribute('data-id');
+            const endpoint = `/todo/${id}`;
+            fetch(endpoint, {
+                method: 'DELETE'
+            })
+            .then(res => res.json())
+            .then(data => {
+                window.location.href = data.redirect;
+            })
+            .catch(err => console.log(err))
+        }
+      } )
+
+
+
+    </script>
+</body>
+</html>
